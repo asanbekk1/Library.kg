@@ -21,7 +21,7 @@ def children_products(request):
         return render(request, template_name='products_home/children.html',
                       context=context_object_name)
 
-#для Подростковая
+#для Подростковаяё
 def teenage_products(request):
     if request.method == "GET":
         query  = models.Product.objects.filter(tags__name='для Подростковая').order_by('-id')
