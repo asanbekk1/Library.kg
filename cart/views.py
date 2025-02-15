@@ -1,35 +1,73 @@
-from django.shortcuts import render, redirect
-from django.contrib.auth.decorators import login_required
-from .models import Cart, CartItem, Order, OrderItem
-from django.http import HttpResponse
-from .models import Book
+from django.shortcuts import render, get_object_or_404, redirect
+from django.http import JsonResponse
+from books.models import Book
+from .models import Order, OrderItem
 
-
-def cart_view(request):
-    cart, created = Cart.objects.get_or_create(user=request.user)
-    items = CartItem.objects.filter(cart=cart)
-    total_price = sum(item.total_price() for item in items)
-    return render(request, 'cart.html', {'items': items, 'total_price': total_price})
 
 def add_to_cart(request, book_id):
-    book = Book.objects.get(id=book_id)
-    cart, created = Cart.objects.get_or_create(user=request.user)
-    cart_item, created = CartItem.objects.get_or_create(cart=cart, book=book)
-    if not created:
-        cart_item.quantity += 1
-        cart_item.save()
-    return redirect('cart')
+    book = get_object_or_404(Book, id=book_id)
+    cart = request.session.get('cart', {})
+
+    if str(book_id) in cart:
+        cart[str(book_id)] += 1
+    else:
+        cart[str(book_id)] = 1
+
+    request.session['cart'] = cart
+    return JsonResponse({'status': 'success', 'cart': cart})
+
+
+def view_cart(request):
+    cart = request.session.get('cart', {})
+    books = []
+    total_price = 0
+
+    for book_id, quantity in cart.items():
+        book = get_object_or_404(Book, id=book_id)
+        total_price += book.price * quantity
+        books.append({
+            'book': book,
+            'quantity': quantity,
+            'total': book.price * quantity
+        })
+
+    context = {
+        'books': books,
+        'total_price': total_price
+    }
+
+    return render(request, 'cart/view_cart.html', context)
+
+
+from django.shortcuts import redirect
+from django.http import JsonResponse
+
+def remove_from_cart(request, book_id):
+    cart = request.session.get('cart', {})
+
+    if str(book_id) in cart:
+        del cart[str(book_id)]
+        request.session['cart'] = cart
+        return JsonResponse({'status': 'success', 'message': 'Книга удалена из корзины'})
+    else:
+        return JsonResponse({'status': 'error', 'message': 'Книга не найдена в корзине'}, status=404)
 
 def checkout(request):
-    cart, created = Cart.objects.get_or_create(user=request.user)
-    items = CartItem.objects.filter(cart=cart)
-    order = Order.objects.create(user=request.user)
-    for item in items:
-        OrderItem.objects.create(order=order, book=item.book, quantity=item.quantity)
-    order.update_total_price()
-    cart.books.clear()
-    return redirect('order_detail', order_id=order.id)
+    cart = request.session.get('cart', {})
+    if not cart:
+        return redirect('view_cart')
 
-def order_detail(request, order_id):
-    order = Order.objects.get(id=order_id)
-    return render(request, 'order_detail.html', {'order': order})
+    order = Order.objects.create(user=request.user)
+    for book_id, quantity in cart.items():
+        book = get_object_or_404(Book, id=book_id)
+        OrderItem.objects.create(order=order, book=book, quantity=quantity)
+
+    order.calculate_total_price()
+    request.session['cart'] = {}
+
+    return redirect('order_confirmation', order_id=order.id)
+
+
+def order_confirmation(request, order_id):
+    order = get_object_or_404(Order, id=order_id)
+    return render(request, 'cart/order_confirmation.html', {'order': order})
