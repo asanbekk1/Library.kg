@@ -1,38 +1,66 @@
-from books.models import Book
 from django.db import models
+from django.contrib.auth.models import User
 
 
-class Order(models.Model):
-    customer = models.ForeignKey('auth.User', on_delete=models.CASCADE)
-    total_amount = models.DecimalField(max_digits=10, decimal_places=2)
-    created_at = models.DateTimeField(auto_now_add=True)
+# Модель книги
+class BookModel(models.Model):
+    title = models.CharField(max_length=200, verbose_name="Название книги")
+    author = models.CharField(max_length=100, verbose_name="Автор")
+    description = models.TextField(verbose_name="Описание")
+    published_date = models.DateField(verbose_name="Дата публикации")
+    cover_image = models.ImageField(upload_to='covers/', verbose_name="Обложка", null=True, blank=True)
+    price = models.IntegerField(default=0)
+    genre = models.CharField(max_length=255, null=True, blank=True)
+    email = models.EmailField(null=True, blank=True)
 
     def __str__(self):
-        return f"Order #{self.id} by {self.customer.username}"
+        return self.title
 
+    class Meta:
+        verbose_name = "Книга"
+        verbose_name_plural = "Книги"
+
+
+# Модель заказа
+class Order(models.Model):
     STATUS_CHOICES = [
-        ('Pending', 'В обработке'),
-        ('Completed', 'Завершен'),
-        ('Cancelled', 'Отменен'),
+        ('pending', 'В обработке'),
+        ('processing', 'Обрабатывается'),
+        ('shipped', 'Отправлен'),
+        ('delivered', 'Доставлен'),
+        ('cancelled', 'Отменен'),
     ]
-    status = models.CharField(max_length=50, choices=STATUS_CHOICES, default='Pending')
-    total_price = models.DecimalField(max_digits=10, decimal_places=2, default=0)
-    shipping_address = models.TextField(blank=True, null=True)
-    payment_method = models.CharField(max_length=50, blank=True, null=True)
-    is_paid = models.BooleanField(default=False)
-    comment = models.TextField(blank=True, null=True)
 
-    def calculate_total_price(self):
-        self.total_price = sum(item.book.price * item.quantity for item in self.orderitem_set.all())
-        self.save()
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='orders')
+    created_at = models.DateTimeField(auto_now_add=True)  # Дата создания заказа
+    updated_at = models.DateTimeField(auto_now=True)  # Дата обновления заказа
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
+    total_price = models.DecimalField(max_digits=10, decimal_places=2, default=0)  # Общая стоимость заказа
 
     def __str__(self):
         return f"Заказ #{self.id} от {self.user.username}"
 
+
+# Модель элемента заказа
 class OrderItem(models.Model):
-    order = models.ForeignKey(Order, related_name='order_items', on_delete=models.CASCADE)
-    book = models.ForeignKey(Book, related_name='order_items', on_delete=models.CASCADE)
-    quantity = models.PositiveIntegerField()
+    order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='items')
+    book = models.ForeignKey(BookModel, on_delete=models.CASCADE)  # Связь с книгой
+    quantity = models.PositiveIntegerField(default=1)
+    price = models.DecimalField(max_digits=10, decimal_places=2)  # Цена на момент заказа
 
     def __str__(self):
-        return f"{self.book.title} x {self.quantity}"
+        return f"{self.quantity} x {self.book.title} (Заказ #{self.order.id})"
+
+
+# Модель корзины
+class Cart(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='carts')
+    book = models.ForeignKey(BookModel, on_delete=models.CASCADE)  # Связь с книгой
+    quantity = models.PositiveIntegerField(default=1)
+    added_at = models.DateTimeField(auto_now_add=True)  # Дата добавления в корзину
+
+    def __str__(self):
+        return f"{self.user.username}'s cart - {self.book.title}"
+
+    def total_price(self):
+        return self.quantity * self.book.price

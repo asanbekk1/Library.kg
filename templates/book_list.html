@@ -1,0 +1,17 @@
+<!-- books/templates/books/book_list.html -->
+<h1>Книги</h1>
+<ul>
+    {% for book in books %}
+        <li>
+            {{ book.title }} - {{ book.price }} руб.
+            <form method="post" action="{% url 'add_to_cart' %}">
+                {% csrf_token %}
+                <input type="hidden" name="book_id" value="{{ book.id }}">
+                <input type="hidden" name="title" value="{{ book.title }}">
+                <input type="hidden" name="price" value="{{ book.price }}">
+                <input type="number" name="quantity" value="1" min="1">
+                <button type="submit">Добавить в корзину</button>
+            </form>
+        </li>
+    {% endfor %}
+</ul>

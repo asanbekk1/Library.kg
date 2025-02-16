@@ -6,6 +6,7 @@ from .models import BookModel, Comment
 from . import forms
 
 
+
 def book_detail(request, book_id):
     book = get_object_or_404(BookModel, id=book_id)
     comments = book.comments.all()
@@ -17,6 +18,7 @@ def book_detail(request, book_id):
             form.instance.book = book
             form.save()
             return render(request, 'book_detail.html', {'book': book, 'form': form, 'comments': comments})
+
 
     return render(request, 'book_detail.html', {'book': book, 'comments': comments, 'form': form})
 
@@ -47,3 +49,7 @@ def system_time(request):
     now = datetime.now()
     if request.method == 'GET':
         return HttpResponse(f"Текущее время: {now.strftime('%Y-%m-%d %H:%M:%S')}")
+
+
+
+

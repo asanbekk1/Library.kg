@@ -1,17 +1,13 @@
-import json
-from django.core.management.base import BaseCommand
-from books.models import Book
+from django import forms
+from .models import Cart
 
-class Command(BaseCommand):
-    help = 'forms from JSON file'
+class AddToCartForm(forms.ModelForm):
+    class Meta:
+        model = Cart
+        fields = ['book_id', 'title', 'price', 'quantity']
 
-    def handle(self, *args, **kwargs):
-        with open('books.json', 'r') as file:
-            books = json.load(file)
-            for book_data in books:
-                Book.objects.create(
-                    title=book_data['title'],
-                    author=book_data['author'],
-                    price=book_data['price']
-                )
-        self.stdout.write(self.style.SUCCESS('Books loaded successfully'))
+    def clean_quantity(self):
+        quantity = self.cleaned_data['quantity']
+        if quantity < 1:
+            raise forms.ValidationError("Количество должно быть больше 0.")
+        return quantity

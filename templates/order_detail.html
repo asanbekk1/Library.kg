@@ -1,0 +1,9 @@
+<!-- cart/templates/cart/order_detail.html -->
+<h1>Заказ #{{ order.id }}</h1>
+<p>Статус: {{ order.get_status_display }}</p>
+<p>Итого: {{ order.total_price }} руб.</p>
+<ul>
+    {% for item in order.items.all %}
+        <li>{{ item.quantity }} x {{ item.title }} - {{ item.price }} руб.</li>
+    {% endfor %}
+</ul>
