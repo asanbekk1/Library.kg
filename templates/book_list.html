@@ -11,6 +11,11 @@
             {% for book in books %}
             <div class="card">
                 <img src="{{ book.cover_image.url }}" class="card-img-top" alt="Книга">
+                <form method="get" action="{% url 'book_search' %}">
+                 <input type="text" name="q" placeholder="Поиск по книгам...">
+                 <button type="submit">Найти</button>
+                </form>
+
                 <div class="card-body">
                     <h5 class="card-title">{{ book.title }}</h5>
                     <p><strong>Цена:</strong> {{ book.price }}</p>

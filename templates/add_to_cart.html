@@ -1,0 +1,18 @@
+{% extends 'base_generic.html' %}
+
+{% block content %}
+  <div class="container">
+    <h2>Product Added to Cart</h2>
+
+    <div class="product-details">
+      <p><strong>Product Name:</strong> {{ product.name }}</p>
+      <p><strong>Price:</strong> ${{ product.price }}</p>
+      <p><strong>Quantity:</strong> {{ quantity }}</p>
+    </div>
+
+    <div class="actions">
+      <a href="{% url 'cart_view' %}" class="btn btn-primary">View Cart</a>
+      <a href="{% url 'product_list' %}" class="btn btn-secondary">Continue Shopping</a>
+    </div>
+  </div>
+{% endblock %}
