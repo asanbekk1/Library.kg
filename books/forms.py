@@ -9,7 +9,10 @@ class CommentForm(forms.ModelForm):
         fields = ['name', 'text', 'star']
 
     def clean(self):
-        star = self.cleaned_data.get('star')
-        if star < 1 or star > 5:
+        cleaned_data = super().clean()
+        star = cleaned_data.get('star')
+
+        if star is not None and (star < 1 or star > 5):
             raise ValidationError('Оценка должна быть от 1 до 5.')
-        return star
+
+        return cleaned_data

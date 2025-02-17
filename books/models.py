@@ -2,30 +2,6 @@ from django.db import models
 from django.contrib.auth.models import User
 
 
-class Cart(models.Model):
-    book = models.ForeignKey('Book', on_delete=models.CASCADE)
-    quantity = models.IntegerField()
-
-    class Comment(models.Model):
-        user = models.ForeignKey(User, on_delete=models.CASCADE)
-        text = models.TextField()
-        created_at = models.DateTimeField(auto_now_add=True)
-
-
-    def __str__(self):
-        return f'{self.name} - {self.book.title}'
-
-
-
-class Book(models.Model):
-    title = models.CharField(max_length=255)
-    author = models.CharField(max_length=255)
-    published_date = models.DateField()
-
-    def __str__(self):
-        return self.title
-
-
 
 class BookModel(models.Model):
     title = models.CharField(max_length=200, verbose_name="Название книги")
@@ -46,7 +22,7 @@ class BookModel(models.Model):
 
 
 class Comment(models.Model):
-    book = models.ForeignKey('books.Book', related_name='comments', on_delete=models.CASCADE)
+    book = models.ForeignKey(BookModel, related_name='comments', on_delete=models.CASCADE)
 
     name = models.CharField(max_length=100)
     text = models.TextField()
@@ -56,4 +32,3 @@ class Comment(models.Model):
 
     def __str__(self):
         return f'{self.name} - {self.book.title}'
-

@@ -4,11 +4,12 @@ from django.shortcuts import render, get_object_or_404
 from .forms import CommentForm
 from .models import BookModel, Comment
 from . import forms
+from django.shortcuts import redirect
 
 
 
-def book_detail(request, book_id):
-    book = get_object_or_404(BookModel, id=book_id)
+def book_detail(request, id):
+    book = get_object_or_404(BookModel, id=id)
     comments = book.comments.all()
     form = CommentForm()
 
@@ -17,10 +18,10 @@ def book_detail(request, book_id):
         if form.is_valid():
             form.instance.book = book
             form.save()
-            return render(request, 'book_detail.html', {'book': book, 'form': form, 'comments': comments})
-
+            return redirect('book_detail', id=id)
 
     return render(request, 'book_detail.html', {'book': book, 'comments': comments, 'form': form})
+
 
 
 def book_list(request):
@@ -28,7 +29,7 @@ def book_list(request):
     context_object_name = {
         'books': books,
     }
-    return render(request, 'book.html', context=context_object_name)
+    return render(request, 'book_list.html', context=context_object_name)
 
 
 def about_me(request):
@@ -49,7 +50,6 @@ def system_time(request):
     now = datetime.now()
     if request.method == 'GET':
         return HttpResponse(f"Текущее время: {now.strftime('%Y-%m-%d %H:%M:%S')}")
-
 
 
 

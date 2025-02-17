@@ -25,11 +25,13 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="/" style="color: yellow;">Главная</a>
+                    <a class="nav-link active" aria-current="page" href="/list" style="color: yellow;">Главная</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'all_products' %}" style="color: yellow;">Хэш теги</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'cart_list' %}" style="color: yellow;">Корзина</a>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
                        aria-expanded="false" style="color: yellow;">
@@ -60,4 +62,9 @@
     </div>
 </nav>
 
+<!--Контент-->
+{% block content %}
+
+
+{% endblock %}
 

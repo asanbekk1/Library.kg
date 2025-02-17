@@ -1,16 +1,17 @@
-<!-- cart/templates/cart/cart_detail.html -->
+{% extends 'components/header.html' %}
+
+{% block content %}
 <h1>Ваша корзина</h1>
-{% if cart_items %}
+
     <ul>
-        {% for item in cart_items %}
             <li>
-                {{ item.title }} - {{ item.quantity }} x {{ item.price }} руб.
-                <a href="{% url 'remove_from_cart' item.id %}">Удалить</a>
+                {{ cart.book.title }} - {{ cart.quantity }} - {{cart.email}} руб.
+                <a href="{% url 'remove_from_cart' cart.id %}">Удалить</a>
             </li>
-        {% endfor %}
+
     </ul>
-    <p>Итого: {{ total_price }} руб.</p>
-    <a href="{% url 'checkout' %}">Оформить заказ</a>
-{% else %}
-    <p>Ваша корзина пуста.</p>
-{% endif %}
+
+    <a href="{% url 'add_to_cart' %}">Оформить заказ</a>
+
+
+{% endblock %}

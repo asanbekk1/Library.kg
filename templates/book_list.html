@@ -1,17 +1,26 @@
-<!-- books/templates/books/book_list.html -->
+{% extends 'components/header.html' %}
+
+{% block content %}
 <h1>Книги</h1>
 <ul>
-    {% for book in books %}
-        <li>
-            {{ book.title }} - {{ book.price }} руб.
-            <form method="post" action="{% url 'add_to_cart' %}">
-                {% csrf_token %}
-                <input type="hidden" name="book_id" value="{{ book.id }}">
-                <input type="hidden" name="title" value="{{ book.title }}">
-                <input type="hidden" name="price" value="{{ book.price }}">
-                <input type="number" name="quantity" value="1" min="1">
-                <button type="submit">Добавить в корзину</button>
-            </form>
-        </li>
-    {% endfor %}
+
+
+
+    <div class="container mt-4">
+        <div class="book-card">
+            {% for book in books %}
+            <div class="card">
+                <img src="{{ book.cover_image.url }}" class="card-img-top" alt="Книга">
+                <div class="card-body">
+                    <h5 class="card-title">{{ book.title }}</h5>
+                    <p><strong>Цена:</strong> {{ book.price }}</p>
+                    <a href="{% url 'book_detail' book.id %}">Подробнее</a>
+
+                </div>
+
+            </div>
+            {% endfor %}
+        </div>
+    </div>
 </ul>
+{% endblock %}

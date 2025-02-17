@@ -1,3 +1,7 @@
+{% extends 'components/header.html' %}
+
+{% block content %}
+
 <h1>Ваша корзина</h1>
 <table>
     <thead>
@@ -21,4 +25,5 @@
 </table>
 
 <p><strong>Общая стоимость: </strong>{{ total_price }}</p>
-<a href="{% url 'checkout' %}">Перейти к оформлению</a>
+<a href="{% url 'add_to_cart' %}">Перейти к оформлению</a>
+{% endblock %}

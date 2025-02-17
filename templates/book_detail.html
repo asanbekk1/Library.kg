@@ -1,4 +1,6 @@
-{% include 'components/header.html' %}
+{% extends 'components/header.html' %}
+
+{% block content %}
 <!-- Контент с информацией о книге -->
 <div class="container mt-4">
     <div class="book-card">
@@ -37,6 +39,6 @@
         </form>
     </div>
 </div>
-
+{% endblock %}
 <!-- Футер -->
 {% include 'components/header.html' %}

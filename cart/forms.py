@@ -4,7 +4,7 @@ from .models import Cart
 class AddToCartForm(forms.ModelForm):
     class Meta:
         model = Cart
-        fields = ['book_id', 'title', 'price', 'quantity']
+        fields = ['book', 'quantity', 'email']
 
     def clean_quantity(self):
         quantity = self.cleaned_data['quantity']

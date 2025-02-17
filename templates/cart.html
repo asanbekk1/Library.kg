@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'components/header.html' %}
 
 {% block content %}
 <h2>Корзина</h2>
@@ -6,15 +6,12 @@
 <ul>
     {% for item in cart_items %}
         <li>{{ item.book.title }} - {{ item.quantity }} шт.
-            <a href="{% url 'remove_from_cart' item.id %}">Удалить</a>
+            <a href="{% url 'cart_detail' item.id %}">Подробнее</a>
         </li>
     {% endfor %}
 </ul>
 
-{% if cart_items %}
-    <a href="{% url 'checkout' %}">Оформить заказ</a>
-{% else %}
-    <p>Ваша корзина пуста.</p>
-{% endif %}
+    <a href="{% url 'add_to_cart' %}">Оформить заказ</a>
+
 
 {% endblock %}
