@@ -10,7 +10,7 @@ from django.db.models import Q
 
 class BookSearchView(ListView):
     model = BookModel
-    template_name = 'book_search_results.html'
+    template_name = 'book_list.html'
     context_object_name = 'books'
 
     def get_queryset(self):

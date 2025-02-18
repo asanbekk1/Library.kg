@@ -1,18 +1,12 @@
-{% extends 'base_generic.html' %}
+{% extends 'components/header.html' %}
 
 {% block content %}
-  <div class="container">
-    <h2>Product Added to Cart</h2>
 
-    <div class="product-details">
-      <p><strong>Product Name:</strong> {{ product.name }}</p>
-      <p><strong>Price:</strong> ${{ product.price }}</p>
-      <p><strong>Quantity:</strong> {{ quantity }}</p>
-    </div>
+<form action="" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <h1>Создание нового продукта</h1>
+    {{ form.as_p }}
+    <input type="submit" name="Create" value="Создать Продукт">
+</form>
 
-    <div class="actions">
-      <a href="{% url 'cart_view' %}" class="btn btn-primary">View Cart</a>
-      <a href="{% url 'product_list' %}" class="btn btn-secondary">Continue Shopping</a>
-    </div>
-  </div>
 {% endblock %}

@@ -6,6 +6,7 @@ from .forms import AddToCartForm
 from django.views.generic import DetailView, ListView
 
 
+
 class AddToCartView(View):
     def get(self, request, *args, **kwargs):
         form = AddToCartForm()
