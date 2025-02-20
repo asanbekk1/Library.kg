@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h1>Фильмы с сайта <a href="https://rezka.ag/films/">https://rezka.ag/films/</a></h1>
+<ul>
+    {% for i in rezka %}
+    <li>
+        <h1>{{ i.title }}</h1>
+    </li>
+    {% endfor %}
+</ul>
+
+</body>
+</html>

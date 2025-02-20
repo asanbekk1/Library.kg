@@ -8,6 +8,7 @@ urlpatterns = [
     path('', include('books.urls')),
     path('', include('hashtags.urls')),
     path('', include('cart.urls')),
+    path('', include('parser_app.urls')),
 ]
 urlpatterns += static(settings.STATIC_URL,
                      document_root=settings.STATIC_ROOT)
