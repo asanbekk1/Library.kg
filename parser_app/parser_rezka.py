@@ -41,4 +41,3 @@ def parsing_rezka():
 
 
 
-

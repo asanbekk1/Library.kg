@@ -1,16 +1,14 @@
 from django import forms
-from .models import ContentModel
+from . import models, parser_rezka
 
-class ContentForm(forms.ModelForm):
-    class Meta:
-        model = ContentModel
-        fields = ['title', 'description', 'media_type', 'url']
+class ContentForm(forms.Form):
+    MEDIA_CHOICES = (
+        ('rezka.ag', 'rezka.ag'),
+    )
+    media_type = forms.ChoiceField(choices=MEDIA_CHOICES)
 
-def parser_data(request):
-    if request.method == 'POST':
-        form = ContentForm(request.POST)
-        if form.is_valid():
-            form.save()
-    else:
-        form = ContentForm()
-    return render(request, 'parser_form.html', {'form': form})
+    def parser_data(self):
+        if self.data['media_type'] == 'rezka.ag':
+            rezka_films = parser_rezka.parsing_rezka()
+            for i in rezka_films:
+                models.ContentModel.objects.create(**i)
