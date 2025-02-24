@@ -30,6 +30,7 @@ INSTALLED_APPS = [
     'hashtags',
     'cart',
     'parser_app',
+    'users',
 ]
 
 MIDDLEWARE = [
@@ -40,6 +41,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'users.middlewares.ExperienceSalaryMiddleware',
+
 ]
 
 ROOT_URLCONF = 'main_app.urls'
@@ -60,7 +63,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'main_app.wsgi.application'
+WSGI_APPLICATION = 'main_app.urls'
 
 
 # Database

@@ -1,7 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 
-URL = 'https://rezka.ag/'
+URL = 'https://mybook.ru/'
 
 HEADERS = {
     'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
@@ -17,27 +17,27 @@ def get_html(url, params=''):
 def get_data(html):
     bs = BeautifulSoup(html, features='html.parser')
     items = bs.find_all('div', class_='b-content__inline_item')
-    rezka_list = []
+    mybook_list = []
     for item in items:
         title = item.find('div', class_='b-content__inline_item-link').get_text(strip=True)
-        rezka_list.append({
+        mybook_list.append({
             'title': title,
         })
-    return rezka_list
+    return mybook_list
 
 # func parser
-def parsing_rezka():
+def parsing_mybook():
     response = get_html(URL)
     if response.status_code == 200:
-        rezka_list2 = []
+        mybook_list2 = []
         for page in range(1,2):
-            response = get_html("https://rezka.ag/films/", params={'page': page})
-            rezka_list2.extend(get_data(response.text))
-        return rezka_list2
+            response = get_html("https://mybook.ru/", params={'page': page})
+            mybook_list2.extend(get_data(response.text))
+        return mybook_list2
     else:
-        raise Exception('Error in parsing rezka')
+        raise Exception('Error in parsing mybook')
 
-#print(parsing_rezka())
+#print(parsing_mybook())
 
 
 
