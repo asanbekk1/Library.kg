@@ -5,7 +5,11 @@ from django.http import HttpResponseBadRequest
 class ExperienceSalaryMiddleware(MiddlewareMixin):
     def process_request(self, request):
         if request.path == '/register/' and request.method == 'POST':
-            experience = int(request.POST.get('experience', 0))
+            experience = request.POST.get('experience', 0)
+            try:
+                experience = int(experience)
+            except (ValueError, TypeError):
+                experience = 0
 
             # Логика расчета зарплаты
             if experience < 1:

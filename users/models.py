@@ -12,10 +12,14 @@ class CustomUser(User):
         ('M', 'Master'),
         ('P', 'PhD'),
     )
-    phone_number = models.CharField(max_length=14, default='+996')
-    age = models.PositiveIntegerField(default=7)
-    gender = models.CharField(max_length=1, choices=GENDER, default='M')
-    experience = models.CharField(max_length=100, blank=True, null=True)
+
+    # Дополнительные поля
+    phone = models.CharField(max_length=15, default='+996', blank=True, null=True)
+    age = models.PositiveIntegerField(default=18, blank=True, null=True)  # Измените значение по умолчанию, если нужно
+    gender = models.CharField(max_length=1, choices=GENDER, default='M', blank=True, null=True)
+    education = models.CharField(max_length=2, choices=EDUCATION, default='HS', blank=True, null=True)
+    experience = models.IntegerField(default=0)  # Опыт работы в годах
+    salary = models.IntegerField(blank=True, null=True)  # Добавлено поле salary
 
     def save(self, *args, **kwargs):
         # Определяем зарплату
@@ -27,7 +31,10 @@ class CustomUser(User):
             self.salary = 70000
         elif 5 <= self.experience < 7:
             self.salary = 100000
-        else: self.experience = 'Вы слишком опытны, вам это покажется скучным'
-
+        else:
+            self.salary = 150000
 
         super().save(*args, **kwargs)
+
+    def __str__(self):
+        return self.username

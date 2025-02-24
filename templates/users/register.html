@@ -5,9 +5,12 @@
     <title>Title</title>
 </head>
 <body>
-<h2>Регистрация</h2>
-<form method="post">
+<h1>Регистрация</h1>
+<form method="POST" enctype="application/x-www-form-urlencoded">
     {% csrf_token %}
     {{ form.as_p }}
-    <button type="submit">Зарегистрироваться</button>
+    <button type="submit">Регистрация</button>
+    <button type="reset">Очистить</button>
 </form>
+</body>
+</html>

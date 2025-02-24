@@ -27,8 +27,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'books',
-    'hashtags',
     'cart',
+    'hashtags',
     'parser_app',
     'users',
 ]
@@ -41,8 +41,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'users.middlewares.ExperienceSalaryMiddleware',
-
+    'users.middlewares.ExperienceSalaryMiddleware'
 ]
 
 ROOT_URLCONF = 'main_app.urls'
@@ -63,7 +62,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'main_app.urls'
+WSGI_APPLICATION = 'main_app.wsgi.application'
 
 
 # Database
@@ -73,9 +72,9 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
-
     }
 }
+
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
