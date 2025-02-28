@@ -1,0 +1,11 @@
+<h1>Список рецептов</h1>
+<a href="{% url 'add_recipe' %}">Добавить рецепт</a>
+<ul>
+    {% for recipe in recipes %}
+        <li>
+            {{ recipe.title }}
+            <a href="{% url 'recipe_detail' recipe.pk %}">Просмотреть</a>
+            <a href="{% url 'delete_recipe' recipe.pk %}">Удалить</a>
+        </li>
+    {% endfor %}
+</ul>
